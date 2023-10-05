@@ -1,4 +1,4 @@
-import fetch, { Response } from 'node-fetch';
+import axios from 'axios';
 
 /**
  * Service to interact with the messaging net service.
@@ -8,7 +8,7 @@ export class MessagingService {
   /**
    * Default Messaging net service URL.
    */
-  static readonly MESSAGING_URL_DEFAULT: string = 'https://messaging.thefirstspine.fr'
+  static readonly MESSAGING_URL_DEFAULT: string = 'https://messaging.thefirstspine.fr';
 
   /**
    * Sends a message in a subject to the clients connected to the service.
@@ -17,19 +17,20 @@ export class MessagingService {
    * @param message The message to send.
    */
   async sendMessage(to: number[]|'*', subject: string|'*', message: any): Promise<IMessagingResponse> {
-    const response: Response = await fetch(this.getMessagingNetServiceUrl() + '/api', {
-      body: JSON.stringify({
+    const response = await axios.post(this.getMessagingNetServiceUrl() + '/api',
+      {
         to,
         subject,
         message,
-      }),
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Client-Cert': Buffer.from(process.env.MESSAGING_PUBLIC_KEY.replace(/\\n/gm, '\n')).toString('base64'),
       },
-    });
-    const jsonResponse = await response.json();
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Client-Cert': Buffer.from(process.env.MESSAGING_PUBLIC_KEY.replace(/\\n/gm, '\n')).toString('base64'),
+        },
+      },
+    );
+    const jsonResponse = response.data;
     return jsonResponse;
   }
 
