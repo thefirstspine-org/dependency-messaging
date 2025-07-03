@@ -1,20 +1,20 @@
 {
   "name": "@thefirstspine/messaging",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "Javascript and Typescript service to interact with the messaging net service.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "devDependencies": {
-    "@types/jest": "^29.5.12",
-    "@types/node": "^20.12.6",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.0.10",
     "@typescript-eslint/eslint-plugin": "^7.6.0",
     "@typescript-eslint/parser": "^7.6.0",
     "eslint": "^8.56.0",
-    "jest": "^29.7.0",
-    "rimraf": "^5.0.5",
-    "ts-jest": "^29.1.2",
+    "jest": "^30.0.4",
+    "rimraf": "^6.0.1",
+    "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.4"
+    "typescript": "^5.8.3"
   },
   "scripts": {
     "build": "rimraf ./lib && tsc -b",
@@ -35,6 +35,6 @@
   },
   "homepage": "https://github.com/thefirstspine/dependency-messaging#readme",
   "dependencies": {
-    "axios": "^1.6.8"
+    "axios": "^1.10.0"
   }
 }
