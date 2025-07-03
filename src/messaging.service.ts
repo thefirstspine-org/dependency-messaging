@@ -17,21 +17,26 @@ export class MessagingService {
    * @param message The message to send.
    */
   async sendMessage(to: number[]|'*', subject: string|'*', message: any): Promise<IMessagingResponse> {
-    const response = await axios.post(this.getMessagingNetServiceUrl() + '/api',
-      {
-        to,
-        subject,
-        message,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Client-Cert': Buffer.from(process.env.MESSAGING_PUBLIC_KEY.replace(/\\n/gm, '\n')).toString('base64'),
+    try {
+      const response = await axios.post(this.getMessagingNetServiceUrl() + '/api',
+        {
+          to,
+          subject,
+          message,
         },
-      },
-    );
-    const jsonResponse = response.data;
-    return jsonResponse;
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Client-Cert': Buffer.from(process.env.MESSAGING_PUBLIC_KEY.replace(/\\n/gm, '\n')).toString('base64'),
+          },
+        },
+      );
+      const jsonResponse = response.data;
+      return jsonResponse;
+    } catch (e) {
+      return null;
+    }
+    
   }
 
   /**
