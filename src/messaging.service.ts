@@ -16,8 +16,12 @@ export class MessagingService {
    * @param subject The subject concerned by the message.
    * @param message The message to send.
    */
-  async sendMessage(to: number[]|'*', subject: string|'*', message: any): Promise<IMessagingResponse> {
+  async sendMessage(to: number[]|'*', subject: string|'*', message: any): Promise<IMessagingResponse | null> {
     try {
+      const publicKey = process.env?.MESSAGING_PUBLIC_KEY;
+      if (!publicKey) {
+        throw new Error('MESSAGING_PUBLIC_KEY environment variable is not set');
+      }
       const response = await axios.post(this.getMessagingNetServiceUrl() + '/api',
         {
           to,
@@ -27,7 +31,7 @@ export class MessagingService {
         {
           headers: {
             'Content-Type': 'application/json',
-            'X-Client-Cert': Buffer.from(process.env.MESSAGING_PUBLIC_KEY.replace(/\\n/gm, '\n')).toString('base64'),
+            'X-Client-Cert': Buffer.from(publicKey.replace(/\\n/gm, '\n')).toString('base64'),
           },
         },
       );
@@ -43,7 +47,7 @@ export class MessagingService {
    * Get the messaging net service URL according to the MESSAGING_URL environment variable.
    */
   getMessagingNetServiceUrl(): string {
-    return process.env?.MESSAGING_URL?.length > 0 ? process.env.MESSAGING_URL : MessagingService.MESSAGING_URL_DEFAULT;
+    return process.env?.MESSAGING_URL ? process.env.MESSAGING_URL : MessagingService.MESSAGING_URL_DEFAULT;
   }
 
 }
